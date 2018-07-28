@@ -50,4 +50,4 @@ HTML format documentation of the API (and model) functionality is located in the
 
 ## Example usage
 
-`client_examples` contains usage examples, in Python and command-line curl. 
+`client_examples/` contains usage examples, in Python and command-line curl. 
