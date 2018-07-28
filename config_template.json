@@ -1,0 +1,18 @@
+{
+    "GAE": true,
+    "postgres":{
+        "host":"localhost",
+        "port":"portnumber",
+        "user":"db_user",
+        "pw":"db_password",
+        "db":"test-db"
+    },
+    "api_token_map":{
+        "token":"username"
+    },
+    "model":{
+        "model_name": "X model",
+        "model_version": "Version X"
+    },
+    "api_version": "Tyche API version X"
+}

@@ -1,0 +1,65 @@
+Note: If using self-signed SSL certificate, make sure to use the '-k' curl argument.
+
+########################
+API Version:
+########################
+
+Execute GET
+
+>$ curl -H "Authorization: Token <API token value>" https://<hostname>:<portnumber>/api_version
+
+Output
+"Tyche API version 1.0"
+
+########################
+Model Version:
+########################
+
+Execute GET
+
+>$ curl -H "Authorization: Token <API token value>" https://<hostname>:<portnumber>/model_version
+
+Output
+{
+    "model name": "Submission binding probability model",
+    "model version": "Version 1.0"
+}
+
+########################
+Binding model:
+########################
+
+Setup sample submission
+
+>$ cat sample_submission.json 
+{"SubmissionNumber": 58347398, "CompanyCode": "cc", "DivisionCode": "dc", "InsuredName": "in", "InsuredAddress": "ia", "InsuredCity": "ic", "InsuredState": "is", "InsuredZip": "iz", "GroupLine": "gl", "Product": "p"}
+
+Execute POST
+
+>$ curl -X POST -H "Authorization: Token <API token value>" -H "Content-Type: application/json" --data @sample_submission.json https://<hostname>:<portnumber>/model/binding_probability
+
+Output
+{
+    "estimated probability": 0,
+    "estimated percentile": 69.0, 
+    "md5sum": "92f253223c44de0c4f4e8938f2469a73"
+}
+
+########################
+Meter Count:
+######################## 
+
+Execute GET
+
+>$ curl -H "Authorization: Token <API token value>" https://<hostname>:<portnumber>/meter_count?startDate=2017-11-04\&endDate=2017-11-08
+
+Output
+20
+
+For finer granularity, execute GET
+
+>$ curl -H "Authorization: Token <API token value>" https://<hostname>:<portnumber>/meter_count?startDate=2017-11-04+05%3A55%3A55.445035\&endDate=2017-11-05+17%3A16%3A42.039061
+
+Output
+3
+

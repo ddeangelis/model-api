@@ -1,0 +1,209 @@
+swagger: '2.0'
+info:
+  version: 1.0.2
+  title: Insurance Submission Binding Model API
+  description: An API to interact with Tyche's submission binding model
+  contact:
+    email: support@tycherisk.co
+  license:
+    name: Tyche Commercial License
+    url: 'https://www.tycherisk.co/legal.html'
+consumes:
+  - application/json
+produces:
+  - application/json
+schemes:
+  - https
+security:
+  - authorization: []
+host: submission-api.tycherisk.co
+basePath: /
+tags:
+  - name: System
+    description: Functionality related to the API
+  - name: Model
+    description: Functionality related to the model
+paths:
+  /api_version:
+    get:
+      tags:
+        - System
+      summary: Get API information
+      description: Return the running API version.
+      responses:
+        '200':
+          description: String containing the API version.
+          schema:
+            type: string
+            example: Tyche API version 1.0
+        '401':
+          description: Invalid or missing API key.
+  /model_version:
+    get:
+      tags:
+        - Model
+      summary: Get model information
+      description: Get the model name and version information.
+      responses:
+        '200':
+          description: >-
+            Object containing two strings, including the model name and the
+            model version.
+          schema:
+            type: object
+            properties:
+              model name:
+                type: string
+                example: Binding probability model
+              model version:
+                type: string
+                example: Version 1.0
+        '401':
+          description: Invalid or missing API key.
+  /meter_count:
+    get:
+      tags:
+        - System
+      summary: Get number of inferences calculated
+      description: >-
+        Get the number of inferences calculated with the model and delivered via
+        API, given start and end dates and times.
+      parameters:
+        - name: startDate
+          description: >-
+            Start date-time for the meter count, in UTC time, in RFC3339 format.
+            Example: "1985-04-12T23:20:50.52Z"
+          type: string
+          format: date-time
+          in: query
+          required: true
+        - name: endDate
+          description: >-
+            End date-time for the meter count, in UTC time, in RFC3339 format.
+            Example: "1985-05-12T23:20:50.52Z"
+          type: string
+          format: date-time
+          in: query
+          required: true
+      responses:
+        '200':
+          description: >-
+            Integer count of the number of inferences calculated and delivered
+            between the start date/time and the end date/time.
+          schema:
+            type: integer
+            minimum: 0
+            example: 212
+        '401':
+          description: Invalid or missing API key.
+  /model/binding_probability:
+    post:
+      tags:
+        - Model
+      summary: Get probability of binding
+      description: Calculate and return the estimated probability of binding a submission representing new business.
+      parameters:
+        - name: Submission
+          description: >-
+            JSON object representing all known information at the time of
+            submission for new business. All fields are required, though "Product" can take the
+            value "NA".
+          in: body
+          schema:
+            $ref: '#/definitions/Submission'
+      responses:
+        '200':
+          description: >-
+            Object contain a probability of binding (0-1), percentile of binding probability relative to the training set, and an md5sum of the
+            submission details for data integrity verification.
+          schema:
+            type: object
+            properties:
+              estimated probability:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 1
+                example: 0.35
+              estimated percentile:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 100
+                example: 80.55
+              md5sum:
+                type: string
+                example: 93d93f3c7089359efd66b9cf05279574
+        '400':
+          description: >-
+            Error: Missing or malformed submission data. A submission number is
+            required.
+        '401':
+          description: Invalid or missing API key.
+        '500':
+          description: >-
+            Warning: Unexpected submission data. Model performance may
+            degrade.
+          schema:
+            type: object
+            properties:
+              estimated probability:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 1
+                example: 0.35
+              estimated percentile:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 100
+                example: 80.55
+              md5sum:
+                type: string
+                example: 93d93f3c7089359efd66b9cf05279574
+securityDefinitions:
+  authorization:
+    name: api_key_authorization
+    type: apiKey
+    in: header
+    description: Enter your API key provided by Tyche
+definitions:
+  Submission:
+    type: object
+    description: >-
+      A submission object encapsulates all information at the point of
+      submission. 
+    required:
+      - SubmissionNumber
+      - CompanyCode
+      - DivisionCode
+      - InsuredName
+      - InsuredAddress
+      - InsuredCity
+      - InsuredState
+      - InsuredZip
+      - GroupLine
+      - Product
+      
+    properties:
+      SubmissionNumber:
+        type: string
+      CompanyCode:
+        type: string
+      DivisionCode:
+        type: string
+      InsuredName:
+        type: string
+      InsuredAddress:
+        type: string
+      InsuredCity:
+        type: string
+      InsuredState:
+        type: string
+      InsuredZip:
+        type: string
+      GroupLine:
+        type: string
+      Product:
+        type: string

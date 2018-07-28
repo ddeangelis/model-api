@@ -1,0 +1,85 @@
+Note: If using self-signed SSL certificate, make sure to use the 'verify=False' requests argument.
+
+# Remember imports:
+import requests
+import json
+import datetime
+
+########################
+API Version:
+########################
+
+Execute GET
+
+In []: requests.get('https://<hostname>:<portnumber>/api_version', headers={'Authorization': 'Token <API token value>'}).json()
+Out[]: 'Tyche API version 1.0'
+
+########################
+Model Version:
+########################
+
+Execute GET
+
+In []: requests.get('https://<hostname>:<portnumber>/model_version', headers={'Authorization': 'Token <API token value>'}).json()
+Out[]: 
+{'model name': 'Submission binding probability model',
+ 'model version': 'Version 1.0'}
+
+
+########################
+Binding Model:
+########################
+
+Setup sample submission
+
+In []: sub
+Out[]: 
+{'CompanyCode': 'cc',
+ 'DivisionCode': 'dc',
+ 'GroupLine': 'gl',
+ 'InsuredAddress': 'ia',
+ 'InsuredCity': 'ic',
+ 'InsuredName': 'in',
+ 'InsuredState': 'is',
+ 'InsuredZip': 'iz',
+ 'Product': 'p',
+ 'SubmissionNumber': 58347398}
+
+In [13]: sub2
+Out[13]: 
+{'CompanyCode': '01',
+ 'DivisionCode': 'GC',
+ 'GroupLine': "Comm'l General Liab",
+ 'InsuredAddress': 'ia',
+ 'InsuredCity': 'Baton Rouge',
+ 'InsuredName': 'John Smith',
+ 'InsuredState': 'LA',
+ 'InsuredZip': '23456',
+ 'Product': 'p',
+ 'SubmissionNumber': 58347398}
+
+
+Execute POST
+
+In [197]: requests.post('https://<hostname>:<portnumber>/model/binding_probability', json.dumps(sub), headers={'Authorization': 'Token <API token value>', 'Content-type': 'application/json'}).json()
+Out[197]: 
+{'estimated percentile': 69.0,
+ 'estimated probability': 0.011288548<portnumber>039237,
+ 'md5sum': '92f253223c44de0c4f4e8938f2469a73'}
+
+########################
+Meter Count:
+########################
+
+Setup date bounds in UTC
+
+In [221]: dates
+Out[221]: 
+{'endDate': datetime.datetime(2017, 11, 8, 0, 0),
+ 'startDate': datetime.datetime(2017, 11, 3, 0, 0)}
+
+Execute GET
+
+In []: requests.get('https://<hostname>:<portnumber>/meter_count', headers={'Authorization': 'Token <API token value>'}, params=dates).json()
+Out []: 3
+
