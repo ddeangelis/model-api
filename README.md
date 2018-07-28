@@ -8,9 +8,10 @@ Tyche builds predictive models for the insurance industry. We maintain those mod
 **Note:** The submission binding model PKL files and generating source are not included in this repository.
 
 ## API Documentation
-HTML format documentation of the API (and model) functionality is located in the /api_docs directory. This was generated from an [OpenAPI 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) specification file, `tyche_api.yaml`. 
+HTML format documentation of the API (and model) functionality is located in the `/api_docs` directory. This was generated from an [OpenAPI 2.0](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/2.0.md) specification file, `tyche_api.yaml`. 
 
 ## Folder Structure
+```bash
 .
 ├── api_docs
 │   ├── Insurance Submission Binding Model API | API Reference_files
@@ -43,6 +44,7 @@ HTML format documentation of the API (and model) functionality is located in the
 │   └── jr_wildcat.py
 ├── tyche_db.py
 └── tyche_logo.png
+```
 
 `tyche_binding_model/` contains truncated utility and wrapper functions that are necessary to load the model PKL files and draw inferences. 
 
